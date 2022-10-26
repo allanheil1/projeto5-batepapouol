@@ -7,14 +7,33 @@
         <link rel="stylesheet" href="estilos/style.css" />
     </head>
     <body>
+        <!-- Header -->
         <header>
-            header
+            <img src="arquivos/logo 1.png">
+            <ion-icon name="people-sharp" onclick="toggleMenu()"></ion-icon>
         </header>
+        <!-- Main -->
         <main>
-            main
+            <ul class = "chat-container">
+                <li class = "private-message">
+                    Mensagem privada
+                </li>
+                <li class = "public-message">
+                    Mensagem pública
+                </li>
+                <li class = "status-message">
+                    Mensagem Status
+                </li>
+            </ul>
         </main>
+        <!-- Footer -->
         <footer>
-            footer
+            <div class="message-box">
+                <input placeholder="Escreva aqui..." class="message-input"></input>
+            </div>
+            <button>
+                <ion-icon name="paper-plane-outline" onclick="sendMessage()"></ion-icon>
+            </button>
         </footer>
         <!-- JavaScript -->
         <script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
