@@ -68,14 +68,29 @@ function renderizaMensagens(response){
             `
         }
     }
-
-    //const lastMessage = response.data[response.data.length - 1].time;
-
 }
 
 function enviarMensagem(){
-    const message = document.querySelector('message-input').value;
-    axios.post(`${APIaddress}/messages`, {from: username, to: des});
+    //seleciona o input
+    const messageToSend = document.querySelector('input').value;
+    //envia para a api
+    axios.post(`${APIaddress}/messages`, {from: username, to: destino, text: messageToSend, type: messageType});
+    //limpa o campo de input de mensagem
+    document.querySelector('input').value = '';
 }
 
-entrarNaSala();
+function mantemLogado(){
+    if(username !== undefined){
+        axios.post(`${APIaddress}/status`, {name: username});
+    }
+}
+
+//funcao que mantém gerencia as principais funcionalidades do chat
+function gerenciaChat(){
+    entrarNaSala();
+
+    setInterval(mantemLogado, 5000);
+    setInterval(puxaMensagens, 2000);
+}
+
+gerenciaChat();
