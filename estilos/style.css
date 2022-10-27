@@ -9,6 +9,7 @@ body {
     background-color: #F3F3F3;
     display: flex;
     flex-direction: column;
+    background-color: #E5E5E5;
 }
 
 header{
@@ -102,3 +103,7 @@ footer input{
     color: lightgray;
 }
 
+.hora {
+    margin-right: 5px;
+    color: #b8b8b8;
+  }
