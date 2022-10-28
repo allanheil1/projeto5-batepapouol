@@ -15,12 +15,16 @@ function puxaMensagens(){
         const promise = axios.get(`${APIaddress}/messages`);
         //chama a função que carrega as mensagens na tela
         promise.then(renderizaMensagens);
+        scrollIntoLast();
     }
 }
 
-function erroAoEntrar(){
-    console.log("Erro ao entrar na sala");
+function erroAoEntrar(response){
     username = undefined;
+    if(response.response.status === 400){
+        alert("username já utilizado, por favor escolha outro");
+    }
+    entraNaSala();
 }
 
 function renderizaMensagens(response){
@@ -28,7 +32,6 @@ function renderizaMensagens(response){
     let htmlDasMensagens = document.querySelector('.chat-container');
     htmlDasMensagens.innerHTML = '';
     for(let i = 0; i < response.data.length; i++){
-        console.log(response.data[i]);
         const message = response.data[i];    
   
         if(message.type === 'private_message' && (message.from === username || message.to === username)){
@@ -67,12 +70,11 @@ function renderizaMensagens(response){
             `
         }
     }
-    scrollIntoLast();
 }
 
 function scrollIntoLast(){
     //scrollamos a página até a última mensagem
-    const lastMsg = document.querySelector('.chat-container').lastChild;
+    const lastMsg = document.querySelector('.chat-container li:last-child');
     lastMsg.scrollIntoView();
 }
 
@@ -82,7 +84,7 @@ function enviarMensagem(){
     //envia para a api
     const messageDone = axios.post(`${APIaddress}/messages`, {from: username, to: destino, text: messageToSend, type: messageType});
     messageDone.then(enviouMensagem);
-
+    messageDone.catch(naoEnviouMensagem);
 }
 
 function enviouMensagem(){
@@ -90,6 +92,11 @@ function enviouMensagem(){
     document.querySelector('input').value = '';
     //após enviar a mensagem, vamos renderizar as mensagens na tela imediatamente
     puxaMensagens();
+}
+
+function naoEnviouMensagem(){
+    //significa que esse usuário não está mais na sala e a página deve ser atualizada (e com isso voltando pra etapa de pedir o nome)
+    window.location.reload();
 }
 
 function mantemLogado(){
