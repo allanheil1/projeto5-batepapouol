@@ -15,6 +15,7 @@ function puxaMensagens(){
         const promise = axios.get(`${APIaddress}/messages`);
         //chama a função que carrega as mensagens na tela
         promise.then(renderizaMensagens);
+        //chama a função que rola a página até a última mensagem
         scrollIntoLast();
     }
 }
@@ -33,7 +34,7 @@ function renderizaMensagens(response){
     htmlDasMensagens.innerHTML = '';
     for(let i = 0; i < response.data.length; i++){
         const message = response.data[i];    
-  
+        //verifica se a mensagem é privada
         if(message.type === 'private_message' && (message.from === username || message.to === username)){
             htmlDasMensagens.innerHTML += `
             <li class = 'private-message'>
@@ -45,7 +46,7 @@ function renderizaMensagens(response){
             </li>
             `
         }
-
+        //verifica se a mensagem é do tipo 'status' (saiu da sala ou entrou na sala)
         if(message.type === 'status'){
             htmlDasMensagens.innerHTML += `
             <li class = 'status-message'>
@@ -57,7 +58,7 @@ function renderizaMensagens(response){
             </li>
             `
         }
-
+        //verifica se a mensagem é uma mensagem 'normal'
         if(message.type === 'message'){
             htmlDasMensagens.innerHTML += `
             <li class = 'public-message'>
@@ -73,8 +74,9 @@ function renderizaMensagens(response){
 }
 
 function scrollIntoLast(){
-    //scrollamos a página até a última mensagem
+    //selecionamos a última mensagem no HTML
     const lastMsg = document.querySelector('.chat-container li:last-child');
+    //scrolla a página até a última mensagem
     lastMsg.scrollIntoView();
 }
 
@@ -105,12 +107,20 @@ function mantemLogado(){
     }
 }
 
+document.addEventListener("keyup", function (evento) {
+    if (evento.key === "Enter") {
+      enviarMensagem();
+    }
+});
+
 //funcao que mantém gerencia as principais funcionalidades do chat
 function gerenciaChat(){
-    entraNaSala();
 
+    entraNaSala();
     setInterval(mantemLogado, 5000);
     setInterval(puxaMensagens, 3000);
+
 }
 
+//ao entrar no site, chama a função que gerencia todo o projeto
 gerenciaChat();
